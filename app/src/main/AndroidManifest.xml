@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Android 13+ granular media permission -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <!-- Android 12L and below -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <!-- ExoPlayer setWakeMode(C.WAKE_MODE_LOCAL): keeps the CPU awake while a local file plays -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Only needed because the VIEW filter below also accepts http(s) streams -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:label="Nova Player"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.NovaPlayer">
+
+        <!--
+            configChanges: the Activity is NOT recreated on rotation / resize / dark-mode flips, so the
+            SurfaceView never tears down and playback continues without a hiccup. The ExoPlayer instance
+            lives in PlayerViewModel anyway, so even a forced recreation keeps playing.
+            fullSensor: follows the accelerometer even if the system "auto-rotate" toggle is on or off
+            per device policy, and allows reverse-landscape / reverse-portrait.
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:resizeableActivity="true"
+            android:screenOrientation="fullSensor"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|navigation|density|uiMode">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- "Open with" support for video files from other apps -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
