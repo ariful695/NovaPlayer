@@ -53,7 +53,9 @@ kotlin {
 
 dependencies {
     // ---- Jetpack Compose (versions managed by the BOM) ----
-    val composeBom = platform("androidx.compose:compose-bom:2026.08.00")
+    // 2026.08.00+ requires AGP 9.1 / compileSdk 37; this is the latest BOM that still
+    // works with AGP 8.x and compileSdk 36.
+    val composeBom = platform("androidx.compose:compose-bom:2026.06.01")
     implementation(composeBom)
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
